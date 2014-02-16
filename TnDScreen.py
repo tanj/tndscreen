@@ -30,8 +30,11 @@ class Screen:
 # \xfe\ff is BOM
 # 
 # Text is encoded utf-16-le (little endian)
-# We have some illegal characters coming up with \xDE
-# Code points U+D800 to U+DFFF are reserved for encoding lead and trail surrogates
+
+# We have some illegal characters coming up with \xDE.  Code points
+# U+D800 to U+DFFF are reserved for encoding lead and trail
+# surrogates.  Might be able to isolate these areas by splitting the
+# sections up using the BOMs scattered through out.
 
 
 def findtot(findres):
