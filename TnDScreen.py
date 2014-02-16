@@ -43,19 +43,6 @@ def findtot(findres):
         c = c + len(f[1])
     return c
 
-def rev_parse(line):
-    l = len(line)
-    new = []
-    while l > 0:
-        try:
-            new.append(unicode(line[l-2:l], 'utf-16-be'))
-        except:
-            sys.stderr.write('\\x{:x}\\x{:x}\n'.format(line[l-2], line[l-1]))
-        l = l - 2
-
-    new.reverse()
-    return new
-
 def get_types(splitline):
     new = []
     for p in splitline:
