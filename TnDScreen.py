@@ -1,10 +1,15 @@
 import sys
 import re
-import codecs
+from struct import *
+
+import pprint
+
+import pdb as debug
 
 class Screen:
     def __init__(self, file_name):
         self.scr = []
+        self.bom = '\xff\xfe' # bom in utf-16-le
         line = []
         with open(file_name, 'rb') as fn:
             f = fn.read()
@@ -25,6 +30,41 @@ class Screen:
             sp.append(s)
         return sp
 
+    def typeall(self):
+        self.typed = []
+        self.gtype = {}
+        for line in self.scr:
+            typeline = []
+            for part in line.split(self.bom):
+                t = None
+                v = None
+                try:
+                    if part[0] == '\xff':
+                        t = part[:2]
+                        try:
+                            v = unicode(part[2:], 'utf-16-le')
+                        except:
+                            v = part[2:]
+                        typeline.append((t,v))
+                        if self.gtype.has_key(t):
+                            self.gtype[t].append(v)
+                        else:
+                            self.gtype.update({t : [v]})
+                    else:
+                        try:
+                            v = unicode(part, 'utf-16-le')
+                        except:
+                            v = part
+                        typeline.append((t,v))
+                        if self.gtype.has_key(t):
+                            self.gtype[t].append(v)
+                        else:
+                            self.gtype.update({t : [v]})
+                except:
+                    print repr(part)
+            self.typed.append(typeline)
+
+        
 # DC1 (\x13) seems to break scr[1] between unicode data and header
 # Seeing a lot of \xfe\xff\xff around 
 # \xfe\ff is BOM
@@ -56,4 +96,7 @@ def get_types(splitline):
 
     return new
 
-        
+def pp(flname, obj):
+    with open(flname, 'wb') as fl:
+        p = pprint.PrettyPrinter(indent=4, stream=fl)
+        p.pprint(obj)

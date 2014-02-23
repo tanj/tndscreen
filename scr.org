@@ -1,0 +1,20 @@
+* Offsets are Bullshit :( They just looked like they worked...
+
+| Offset (hex) | Size | Format | Purpose                                   |
+|--------------+------+--------+-------------------------------------------|
+|           16 |    4 | I      | Target Resolution (App Settings) - Width  |
+|           1A |    4 | I      | Target Resolution (App Settings) - Height |
+|          43C |    2 | h      | Screen Size - Width                       |
+|          43E |    2 | h      | Screen Size - Height                      |
+|          402 |    2 | h      | Location - Top                            |
+|          404 |    2 | h      | Location - Left                           |
+|           44 |    2 | H      | Security Level                            |
+|              |      |        |                                           |
+
+
+Strings are marked in the file by BOM followed by \xff\xXX where XX is
+the number of characters in the string. Ex. \xff\xfe\xff\x08Titlebar
+
+[Some times] if it is \xff\xfe\xff\x00 the following is an unsigned int (I)
+representing a boolean value. Ex. \xff\xfe\xff\x00 \x00\x01 \x00\x00
+== 1 (True) 
